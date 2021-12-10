@@ -1,16 +1,8 @@
-const { User } = require('../models');
+const { Thought, User } = require('../models');
 
 const userController = {
     getAllUsers(req, res) {
         User.find()
-            .populate({
-                path: 'thoughts',
-                select: '-__v'
-            })
-            .populate({
-                path: 'friends',
-                select: '-__v'
-            })
             .select('-__v')
             .sort({ _id: -1 })
             .then(dbUserData => res.json(dbUserData))
@@ -60,23 +52,21 @@ const userController = {
             .catch(err => res.status(400).json(err));
     },
 
-    async deleteUser({ params }, res) {
-        // const response = await Thought.deleteMany({ username: params.username })
-        //     .then(deletedData => {
-        //         console.log(`Deleted ${deletedData.deletedCount} associated thoughts.`);
-        //     });
-
-        // if(!response.ok) {
-        //     return console.log('Unable to delete associated thoughts.');
-        // }
-    
+    deleteUser({ params }, res) {
         User.findOneAndDelete({ _id: params.id })
             .then(deletedUser => {
                 if(!deletedUser) {
                     res.status(404).json({ message: 'No user found with this id!' });
                     return;
                 }
-                res.json(deletedUser);
+                return deletedUser;
+            })
+            .then(({ username }) => {
+                Thought.deleteMany({ username: username })
+                    .then(({ deletedCount }) => {
+                        res.json({ message: `User ${username} and ${deletedCount} associated thought(s) deleted!`});
+                    })
+                    .catch(err => res.status(400).json(err));
             })
             .catch(err => res.status(400).json(err));
     },
