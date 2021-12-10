@@ -19,7 +19,7 @@ A social network API that uses a NoSQL (MongoDB) database in order to handle lar
 * [Questions](#questions)
 
 ## Demo
-[Click here](https://the-tech-blog-24601.herokuapp.com/) to watch a demo of the application.
+[Click here](https://watch.screencastify.com/v/7SgBUeFfpv0bYgDhcnh9) to watch a demo of the application.
 
 ## Installation
 To install the app on your machine:
