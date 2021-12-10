@@ -21,6 +21,11 @@ const ReactionSchema = new Schema(
             default: Date.now,
             get: createdAtVal => format(createdAtVal, 'PPPppp')
         }
+    },
+    {
+        toJSON: {
+            getters: true
+        }
     }
 );
 
